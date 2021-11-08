@@ -4,9 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>se.idsec.utils</groupId>
   <artifactId>print-cert</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.3</version>
   <packaging>jar</packaging>
   <name>Printable Certificates</name>
+  <url>https://github.com/idsec-solutions/print-cert</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
