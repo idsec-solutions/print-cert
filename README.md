@@ -50,6 +50,9 @@ The PrintCertificate objects offers print capabilities using the functions:
 
 See javadoc for optional parameters.
 
+### Example CSS
+
+Example css is provided in the css folder.
 
 ## Examples
 ### HTML print example
