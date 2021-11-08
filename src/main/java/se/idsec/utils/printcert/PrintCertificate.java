@@ -62,16 +62,34 @@ public class PrintCertificate extends X509CertificateHolder {
     X509Certificate cert;
     String certStringRepr;
 
+    /**
+     * Constructor
+     * @param cert {@link X509Certificate}
+     * @throws CertificateEncodingException exception parsing certificate
+     * @throws CertificateException exception parsing certificate
+     * @throws IOException exception parsing certificate
+     */
     public PrintCertificate(X509Certificate cert) throws CertificateEncodingException, CertificateException, IOException {
         super(cert.getEncoded());
         initValues();
     }
 
+    /**
+     * Constructor
+     * @param bytes certificate bytes
+     * @throws CertificateException exception parsing certificate
+     * @throws IOException exception parsing certificate
+     */
     public PrintCertificate(byte[] bytes) throws CertificateException, IOException {
         super(bytes);
         initValues();
     }
 
+    /**
+     * Constructor
+     * @param x509CertificateHolder {@link X509CertificateHolder}
+     * @throws IOException exception parsing certificate
+     */
     public PrintCertificate(X509CertificateHolder x509CertificateHolder) throws IOException {
         super(x509CertificateHolder.getEncoded());
         initValues();

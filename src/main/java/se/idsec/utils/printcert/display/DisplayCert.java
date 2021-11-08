@@ -24,6 +24,7 @@ package se.idsec.utils.printcert.display;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.*;
+import org.bouncycastle.asn1.x509.PrivateKeyUsagePeriod;
 import org.bouncycastle.asn1.x509.qualified.BiometricData;
 import org.bouncycastle.util.encoders.Hex;
 import se.idsec.utils.printcert.PrintCertificate;
@@ -34,10 +35,7 @@ import se.idsec.utils.printcert.enums.SubjectDnType;
 import se.idsec.utils.printcert.enums.SupportedExtension;
 import se.idsec.utils.printcert.extension.ExtensionInfo;
 import se.idsec.utils.printcert.utils.CertUtils;
-import se.idsec.x509cert.extensions.AuthnContext;
-import se.idsec.x509cert.extensions.BiometricInfo;
-import se.idsec.x509cert.extensions.QCStatements;
-import se.idsec.x509cert.extensions.SubjectInformationAccess;
+import se.idsec.x509cert.extensions.*;
 import se.idsec.x509cert.extensions.data.MonetaryValue;
 import se.idsec.x509cert.extensions.data.PDSLocation;
 import se.idsec.x509cert.extensions.data.SemanticsInformation;
@@ -45,10 +43,6 @@ import se.swedenconnect.schemas.cert.authcont.saci_1_0.AttributeMapping;
 import se.swedenconnect.schemas.cert.authcont.saci_1_0.AuthContextInfo;
 import se.swedenconnect.schemas.cert.authcont.saci_1_0.IdAttributes;
 import se.swedenconnect.schemas.cert.authcont.saci_1_0.SAMLAuthContext;
-import sun.security.x509.InhibitAnyPolicyExtension;
-import sun.security.x509.NameConstraintsExtension;
-import sun.security.x509.PolicyConstraintsExtension;
-import sun.security.x509.PolicyMappingsExtension;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -159,7 +153,6 @@ public class DisplayCert {
   private static UnitDisplayData getExtensionPrintData(ASN1ObjectIdentifier oid, ASN1Primitive extDataASN1, boolean critical, byte[] bytes,
     int idx) throws IOException {
     SupportedExtension extension = SupportedExtension.getExtension(oid);
-    StringBuilder b = new StringBuilder();
     List<String[]> da = new ArrayList<>();
 
     switch (extension) {
@@ -225,7 +218,7 @@ public class DisplayCert {
               da.add(new String[] { "DistributionPoint" + getIndexStr(dpIdx), getGeneralNameStr(names[i]) });
             }
           }
-          catch (Exception e) {
+          catch (Exception ex) {
           }
         }
       }
@@ -247,8 +240,6 @@ public class DisplayCert {
       }
       return new UnitDisplayData(extension, idx, critical, da);
     //return new UnitDisplayData(extension, idx, critical, new ExtendedKeyUsageExtension(critical, bytes).toString(), true);
-    case inhibitAnyPolicy:
-      return new UnitDisplayData(extension, idx, critical, new InhibitAnyPolicyExtension(critical, bytes).toString(), true);
     case issuerAlternativeName:
       GeneralNames ian = GeneralNames.getInstance(extDataASN1);
       if (ian != null) {
@@ -265,12 +256,18 @@ public class DisplayCert {
       return new UnitDisplayData(extension, idx, critical, da);
     case logoType:
       return new UnitDisplayData(extension, idx, critical, null, false);
+    case inhibitAnyPolicy:
+      getInhibitAnyPolicyText(InhibitAnyPolicy.getInstance(bytes), da);
+      return new UnitDisplayData(extension, idx, critical, da);
     case nameConstraints:
-      return new UnitDisplayData(extension, idx, critical, new NameConstraintsExtension(critical, bytes).toString(), true);
+      getNameConstraintsText(NameConstraints.getInstance(bytes), da);
+      return new UnitDisplayData(extension, idx, critical, da);
     case policyConstraints:
-      return new UnitDisplayData(extension, idx, critical, new PolicyConstraintsExtension(critical, bytes).toString(), true);
+      getPolicyConstraintsText(PolicyConstraints.getInstance(bytes), da);
+      return new UnitDisplayData(extension, idx, critical, da);
     case policyMappings:
-      return new UnitDisplayData(extension, idx, critical, new PolicyMappingsExtension(critical, bytes).toString(), true);
+      getPolicyMappingsText(PolicyMappings.getInstance(bytes), da);
+      return new UnitDisplayData(extension, idx, critical, da);
     case privateKeyUsagePeriod:
       PrivateKeyUsagePeriod pkup = PrivateKeyUsagePeriod.getInstance(extDataASN1);
       if (pkup.getNotBefore() != null) {
@@ -777,6 +774,60 @@ public class DisplayCert {
     }
   }
 
+  private static void getPolicyMappingsText(PolicyMappings instance, List<String[]> da) {
+
+    final ASN1Sequence pmSeq = (ASN1Sequence) instance.toASN1Primitive();
+    final Iterator<ASN1Encodable> iterator = pmSeq.iterator();
+    while (iterator.hasNext()){
+      ASN1Sequence oidSeq = ASN1Sequence.getInstance(iterator.next());
+      String idp = ASN1ObjectIdentifier.getInstance(oidSeq.getObjectAt(0)).getId();
+      String sdp = ASN1ObjectIdentifier.getInstance(oidSeq.getObjectAt(0)).getId();
+      da.add(new String[]{"Mapping", "issuer: " + idp + " --> subject: " + sdp});
+    }
+  }
+
+  private static void getPolicyConstraintsText(PolicyConstraints instance, List<String[]> da) {
+
+    final BigInteger requireExplicitPolicyMapping = instance.getRequireExplicitPolicyMapping();
+    if (requireExplicitPolicyMapping != null){
+      da.add(new String[]{"Require explicit", requireExplicitPolicyMapping.toString()});
+    }
+    final BigInteger inhibitPolicyMapping = instance.getInhibitPolicyMapping();
+    if (inhibitPolicyMapping != null) {
+      da.add(new String[]{"Inhibit mapping", inhibitPolicyMapping.toString()});
+    }
+  }
+
+  private static void getNameConstraintsText(NameConstraints instance, List<String[]> da) {
+
+    final GeneralSubtree[] permittedSubtrees = instance.getPermittedSubtrees();
+    final GeneralSubtree[] excludedSubtrees = instance.getExcludedSubtrees();
+
+    printGeneralSubtree("Permitted Subtree", permittedSubtrees, da);
+    printGeneralSubtree("Excluded Subtree", excludedSubtrees, da);
+  }
+
+  private static void printGeneralSubtree(String title, GeneralSubtree[] generalSubtreeArray, List<String[]> da) {
+    if (generalSubtreeArray != null && generalSubtreeArray.length > 0 ){
+      for (int i = 0; i< generalSubtreeArray.length ; i++){
+        GeneralSubtree subtree = generalSubtreeArray[i];
+        da.add(new String[]{title + "["+i+"]", getGeneralNameStr(subtree.getBase())});
+        if (subtree.getMinimum() != null){
+          da.add(new String[]{"  minimum", subtree.getMinimum().toString()});
+        }
+        if (subtree.getMaximum() != null){
+          da.add(new String[]{"  maximum", subtree.getMaximum().toString()});
+        }
+      }
+    }
+  }
+
+  private static void getInhibitAnyPolicyText(InhibitAnyPolicy instance, List<String[]> da) {
+    da.add(new String[]{"Skip certs", instance.getSkipCerts().toString()});
+  }
+
+
+
   private static String getHtmlDisplay(List<UnitDisplayData> dispList, String heading, CertTableClasses tableClasses) {
     StringBuilder htmlStr = new StringBuilder();
 
@@ -985,11 +1036,6 @@ public class DisplayCert {
         }
         b.append("        ").append(attrInfo.getDispName()).append(": ").append(attrInfo.getValue()).append("\n");
       }
-/*
-      for (SubjectAttributeInfo attrInfo : attrInfoList) {
-        b.append(attrInfo.getDispName()).append(": ").append(attrInfo.getValue()).append("\n");
-      }
-*/
       return b.toString();
     }
   }

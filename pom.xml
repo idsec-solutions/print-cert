@@ -21,19 +21,77 @@
     <artifactId>print-cert</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
+    <name>Printable Certificates</name>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <name>Printable Certificates</name>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:https://github.com/idsec-solutions/print-cert.git</connection>
+        <developerConnection>scm:https://github.com/idsec-solutions/print-cert.git</developerConnection>
+        <url>https://github.com/idsec-solutions/print-cert/tree/main</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Stefan Santesson</name>
+            <email>stefan@idsec.se</email>
+            <organization>IDsec Solutions AB</organization>
+            <organizationUrl>https://www.idsec.se</organizationUrl>
+        </developer>
+        <developer>
+            <name>Martin Lindström</name>
+            <email>martin@idsec.se</email>
+            <organization>IDsec Solutions AB</organization>
+            <organizationUrl>https://www.idsec.se</organizationUrl>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>IDsec Solutions AB</name>
+        <url>https://idsec.se</url>
+    </organization>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>shibboleth</id>
+            <name>Shibboleth Maven Repo</name>
+            <url>https://build.shibboleth.net/nexus/content/repositories/releases</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
-            <scope>provided</scope>
-            <version>1.65</version>
+            <version>[1.65,)</version>
         </dependency>
         <dependency>
             <groupId>se.idsec.sigval.base</groupId>
@@ -41,4 +99,104 @@
             <version>1.0.1</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+
+        <profile>
+            <id>release</id>
+
+            <!-- See http://central.sonatype.org/pages/apache-maven.html for setup -->
+
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <!--
+                              Allows manual inspection of the staging repo before deploying
+                              it to the central repo.
+                              Use 'mvn nexus-staging:release -Prelease' to release and
+                              'mvn nexus-staging:drop' to abort.
+                             -->
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>attach-test-sources</id>
+                                <goals>
+                                    <goal>test-jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadoc</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+
+                            <doctitle>OpenSAML 4.x Security Extensions - ${project.version}</doctitle>
+                            <windowtitle>OpenSAML 4.x Security Extensions - ${project.version}</windowtitle>
+                            <detectJavaApiLink>true</detectJavaApiLink>
+                            <links>
+                                <link>https://build.shibboleth.net/nexus/content/sites/site/java-opensaml/4.1.1/apidocs/</link>
+                                <link>https://build.shibboleth.net/nexus/content/sites/site/java-support/8.2.1/apidocs/</link>
+                            </links>
+                            <additionalparam>-Xdoclint:all -Xdoclint:-missing</additionalparam>
+                            <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
+                            <additionalJOptions>
+                                <additionalJOption>-Xdoclint:all</additionalJOption>
+                                <additionalJOption>-Xdoclint:-missing</additionalJOption>
+                            </additionalJOptions>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+        </profile>
+
+    </profiles>
 </project>
