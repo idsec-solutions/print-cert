@@ -21,29 +21,6 @@
  */
 package se.idsec.utils.printcert.display;
 
-import org.bouncycastle.asn1.*;
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.*;
-import org.bouncycastle.asn1.x509.PrivateKeyUsagePeriod;
-import org.bouncycastle.asn1.x509.qualified.BiometricData;
-import org.bouncycastle.util.encoders.Hex;
-import se.idsec.utils.printcert.PrintCertificate;
-import se.idsec.utils.printcert.data.SubjectAttributeInfo;
-import se.idsec.utils.printcert.display.html.TableElement;
-import se.idsec.utils.printcert.enums.OidName;
-import se.idsec.utils.printcert.enums.SubjectDnType;
-import se.idsec.utils.printcert.enums.SupportedExtension;
-import se.idsec.utils.printcert.extension.ExtensionInfo;
-import se.idsec.utils.printcert.utils.CertUtils;
-import se.idsec.x509cert.extensions.*;
-import se.idsec.x509cert.extensions.data.MonetaryValue;
-import se.idsec.x509cert.extensions.data.PDSLocation;
-import se.idsec.x509cert.extensions.data.SemanticsInformation;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.AttributeMapping;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.AuthContextInfo;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.IdAttributes;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.SAMLAuthContext;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -52,9 +29,65 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1GeneralizedTime;
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1Set;
+import org.bouncycastle.asn1.DERIA5String;
+import org.bouncycastle.asn1.DERPrintableString;
+import org.bouncycastle.asn1.DERUTF8String;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.AccessDescription;
+import org.bouncycastle.asn1.x509.AuthorityInformationAccess;
+import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.CRLDistPoint;
+import org.bouncycastle.asn1.x509.CertificatePolicies;
+import org.bouncycastle.asn1.x509.DistributionPoint;
+import org.bouncycastle.asn1.x509.DistributionPointName;
+import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.asn1.x509.GeneralSubtree;
+import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.asn1.x509.NameConstraints;
+import org.bouncycastle.asn1.x509.PolicyConstraints;
+import org.bouncycastle.asn1.x509.PolicyMappings;
+import org.bouncycastle.asn1.x509.PrivateKeyUsagePeriod;
+import org.bouncycastle.asn1.x509.SubjectDirectoryAttributes;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
+import org.bouncycastle.asn1.x509.qualified.BiometricData;
+import org.bouncycastle.util.encoders.Hex;
+
+import se.idsec.utils.printcert.PrintCertificate;
+import se.idsec.utils.printcert.data.SubjectAttributeInfo;
+import se.idsec.utils.printcert.display.html.TableElement;
+import se.idsec.utils.printcert.enums.OidName;
+import se.idsec.utils.printcert.enums.SupportedExtension;
+import se.idsec.utils.printcert.extension.ExtensionInfo;
+import se.idsec.utils.printcert.utils.CertUtils;
+import se.idsec.x509cert.extensions.AuthnContext;
+import se.idsec.x509cert.extensions.BiometricInfo;
+import se.idsec.x509cert.extensions.InhibitAnyPolicy;
+import se.idsec.x509cert.extensions.QCStatements;
+import se.idsec.x509cert.extensions.SubjectInformationAccess;
+import se.idsec.x509cert.extensions.data.MonetaryValue;
+import se.idsec.x509cert.extensions.data.PDSLocation;
+import se.idsec.x509cert.extensions.data.SemanticsInformation;
+import se.swedenconnect.schemas.cert.authcont.saci_1_0.AttributeMapping;
+import se.swedenconnect.schemas.cert.authcont.saci_1_0.AuthContextInfo;
+import se.swedenconnect.schemas.cert.authcont.saci_1_0.IdAttributes;
+import se.swedenconnect.schemas.cert.authcont.saci_1_0.SAMLAuthContext;
 
 /**
  * @author stefan
@@ -341,7 +374,7 @@ public class DisplayCert {
     UnitDisplayData udd = new UnitDisplayData(UnitType.certFields);
     udd.setStructured(true);
     List<String[]> dataArray = new ArrayList<>();
-    dataArray.add(new String[] { "Version", String.valueOf(cert.getVersion()) });
+    dataArray.add(new String[] { "Version", String.valueOf(cert.getVersionNumber()) });
     dataArray.add(new String[] { "Serial number", cert.getSerialNumber().toString(16) });
     dataArray.add(new String[] { "Issuer", getCertNameFieldPrint(cert.getIssuer(), decode, html) });
     dataArray.add(new String[] { "Not valid before", cert.getNotBefore().toString() });
@@ -406,7 +439,6 @@ public class DisplayCert {
     List<String> textLines = CertUtils.getTextLines(cert.toOriginalString());
     UnitDisplayData dispData = new UnitDisplayData(UnitType.signature);
     StringBuilder b = new StringBuilder();
-    boolean sigStart = false;
     int i = 0;
     int algoStart = -1;
     List<String[]> da = new ArrayList<>();
@@ -424,7 +456,6 @@ public class DisplayCert {
     boolean display=false;
     if (verbose) {
       String sigAlgo = "";
-      String sigValue = "";
       if (algoStart > -1) {
         for (int j = algoStart; j < textLines.size(); j++) {
           String line = textLines.get(j);
@@ -999,7 +1030,6 @@ public class DisplayCert {
       ASN1InputStream ain = new ASN1InputStream(name.getEncoded());
       ASN1Sequence nameSeq = ASN1Sequence.getInstance(ain.readObject());
 
-      Map<SubjectDnType, String> subjectDnAttributeMap = new EnumMap<SubjectDnType, String>(SubjectDnType.class);
       Iterator<ASN1Encodable> subjDnIt = nameSeq.iterator();
       while (subjDnIt.hasNext()) {
         ASN1Set rdnSet = (ASN1Set) subjDnIt.next();

@@ -21,17 +21,6 @@
  */
 package se.idsec.utils.printcert;
 
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.Extension;
-import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
-import org.bouncycastle.cert.X509CertificateHolder;
-import se.idsec.utils.printcert.display.CertTableClasses;
-import se.idsec.utils.printcert.display.DisplayCert;
-import se.idsec.utils.printcert.extension.ExtensionInfo;
-import se.idsec.utils.printcert.utils.CertUtils;
-import se.idsec.utils.printcert.utils.PEM;
-
-import javax.security.auth.x500.X500Principal;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +38,18 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.security.auth.x500.X500Principal;
+
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
+import org.bouncycastle.cert.X509CertificateHolder;
+
+import se.idsec.utils.printcert.display.CertTableClasses;
+import se.idsec.utils.printcert.display.DisplayCert;
+import se.idsec.utils.printcert.extension.ExtensionInfo;
+import se.idsec.utils.printcert.utils.CertUtils;
+import se.idsec.utils.printcert.utils.PEM;
+
 /**
  * This extension of the Bouncy castle X509CertificateHolder adds extended printing capabilities for
  * outputting the certificate content to text or html
@@ -56,7 +57,9 @@ import java.util.logging.Logger;
  * @author Stefan Santeson
  */
 public class PrintCertificate extends X509CertificateHolder {
-
+    
+    private static final long serialVersionUID = 3088571489307085589L;
+    
     Map<String, ExtensionInfo> extensionsMap;
     List<ExtensionInfo> extensionInfoList;
     X509Certificate cert;
