@@ -7,6 +7,7 @@
   <version>1.0.3</version>
   <packaging>jar</packaging>
   <name>Printable Certificates</name>
+  <description>Utility for printing X.509 certificates</description>
   <url>https://github.com/idsec-solutions/print-cert</url>
 
   <properties>
