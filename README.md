@@ -1,7 +1,7 @@
 ![Logo](https://idsec-solutions.github.io/signservice-integration-api/img/idsec.png)
 # PrintCertificate
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven central](https://maven-badges.herokuapp.com/maven-central/se.idsec.utils/print-cert/badge.svg)](https://maven-badges.herokuapp.com/maven-central/se.idsec.utils/print-cert)
 
 Open source library for printing X.509 certificate content
 
@@ -15,28 +15,44 @@ The output formats offered by this library are:
 - Html based print (with customizable css)
 - PEM certificate format
 
+## Maven
+
+The print-cert artifacts are published to Maven central.
+
+Include the following snippet in your Maven POM to add print-cert as a dependency for your project.
+
+```
+<dependency>
+  <groupId>se.idsec.utils</groupId>
+  <artifactId>print-cert</artifactId>
+  <version>${print-cert.version}</version>
+</dependency>
+```
+
 ## Usage
 
-Instantiate the class se.idsec.utils.printcert.PrintCertificate by any of its constructors;
+Instantiate the class `se.idsec.utils.printcert.PrintCertificate` by any of its constructors;
 
 From byte:
 
 ```
-byte[] certBytes;
+byte[] certBytes = ...;
 PrintCertificate printCert = new PrintCertificate(certBytes);
 
 ```
 
-From X509Certificate
+From X509Certificate:
+
 ```
-X509Certificate x509Certificate;
+X509Certificate x509Certificate = ...;
 PrintCertificate printCert = new PrintCertificate(x509Certificate);
 
 ```
 
-From X509CertificateHolder
+From X509CertificateHolder:
+
 ```
-X509CertificateHolder x509CertificateHolder;
+X509CertificateHolder x509CertificateHolder = ...;
 PrintCertificate printCert = new PrintCertificate(x509CertificateHolder);
 
 ```
@@ -115,4 +131,4 @@ Algorithm: SHA256WITHRSA
 
 ---
 
-Copyright &copy; 2016-2021, [IDsec Solutions](https://idsec.se). Licensed under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
+Copyright &copy; 2021, [IDsec Solutions](https://idsec.se). Licensed under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).

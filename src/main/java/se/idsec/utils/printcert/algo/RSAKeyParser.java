@@ -37,7 +37,7 @@ public class RSAKeyParser extends PKValueData {
             ASN1InputStream pkIn = new ASN1InputStream(pkValBitString.getOctets());
             ASN1Sequence pkValSeq = ASN1Sequence.getInstance(pkIn.readObject());
             ASN1Integer modulus = ASN1Integer.getInstance(pkValSeq.getObjectAt(0));
-            ASN1Integer pubExp = ASN1Integer.getInstance(pkValSeq.getObjectAt(1));
+            ASN1Integer.getInstance(pkValSeq.getObjectAt(1));
             keySize = modulus.getValue().bitLength();            
         } catch (Exception e) {
             keySize = 0;
