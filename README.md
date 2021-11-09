@@ -1,7 +1,7 @@
 ![Logo](https://idsec-solutions.github.io/signservice-integration-api/img/idsec.png)
 # PrintCertificate
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven central](https://maven-badges.herokuapp.com/maven-central/se.idsec.utils/print-cert/badge.svg)](https://maven-badges.herokuapp.com/maven-central/se.idsec.utils/print-cert)
 
 Open source library for printing X.509 certificate content
 
@@ -14,6 +14,20 @@ The output formats offered by this library are:
 - Text based print (optimized for monospace or regular fonts)
 - Html based print (with customizable css)
 - PEM certificate format
+
+## Maven
+
+The print-cert artifacts are published to Maven central.
+
+Include the following snippet in your Maven POM to add opensaml-security-ext as a dependency for your project.
+
+```
+<dependency>
+  <groupId>se.idsec.utils</groupId>
+  <artifactId>print-cert</artifactId>
+  <version>${print-cert.version}</version>
+</dependency>
+```
 
 ## Usage
 
