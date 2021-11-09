@@ -19,7 +19,7 @@ The output formats offered by this library are:
 
 The print-cert artifacts are published to Maven central.
 
-Include the following snippet in your Maven POM to add opensaml-security-ext as a dependency for your project.
+Include the following snippet in your Maven POM to add print-cert as a dependency for your project.
 
 ```
 <dependency>
