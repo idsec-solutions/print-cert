@@ -18,7 +18,7 @@ package se.idsec.utils.printcert.enums;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ocsp.OCSPObjectIdentifiers;
 import org.bouncycastle.asn1.x509.Extension;
-import se.idsec.x509cert.extensions.AuthnContext;
+import se.swedenconnect.cert.extensions.AuthnContext;
 
 /**
  *
