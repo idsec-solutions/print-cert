@@ -131,4 +131,4 @@ Algorithm: SHA256WITHRSA
 
 ---
 
-Copyright &copy; 2021, [IDsec Solutions](https://idsec.se). Licensed under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
+Copyright &copy; 2021-2022, [IDsec Solutions](https://idsec.se). Licensed under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
