@@ -37,12 +37,6 @@
       <organization>IDsec Solutions AB</organization>
       <organizationUrl>https://www.idsec.se</organizationUrl>
     </developer>
-    <developer>
-      <name>Martin Lindström</name>
-      <email>martin@idsec.se</email>
-      <organization>IDsec Solutions AB</organization>
-      <organizationUrl>https://www.idsec.se</organizationUrl>
-    </developer>
   </developers>
 
   <organization>
@@ -169,7 +163,7 @@
               <links>
                 <link>https://javadoc.io/doc/org.bouncycastle/bcprov-jdk15on/latest/</link>
                 <link>https://javadoc.io/doc/org.bouncycastle/bcpkix-jdk15on/latest/</link>
-                <link>https://idsec-solutions.github.io/sig-validation-base/javadoc/cert-extensions/</link>
+                <link>https://docs.swedenconnect.se/signature-validation/javadoc/cert-extensions/</link>
               </links>
               <additionalparam>-Xdoclint:all -Xdoclint:-missing</additionalparam>
               <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
