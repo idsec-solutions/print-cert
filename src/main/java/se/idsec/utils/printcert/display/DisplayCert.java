@@ -282,6 +282,11 @@ public class DisplayCert {
       getNetscapeCertTypeText(nsct, da);
       return new UnitDisplayData(extension, idx, critical, da);
     case logoType:
+/*
+      org.bouncycastle.asn1.x509
+      getLogoTypeText(nsct, da);
+      return new UnitDisplayData(extension, idx, critical, da);
+*/
       return new UnitDisplayData(extension, idx, critical, null, false);
     case inhibitAnyPolicy:
       getInhibitAnyPolicyText(InhibitAnyPolicy.getInstance(bytes), da);
