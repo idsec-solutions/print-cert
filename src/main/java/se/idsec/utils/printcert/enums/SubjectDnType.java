@@ -17,6 +17,8 @@ package se.idsec.utils.printcert.enums;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.logging.Logger;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -48,6 +50,9 @@ public enum SubjectDnType {
     email("E-Mail", BCStyle.EmailAddress.getId()),
     dateOfBirth("Date of Birth", BCStyle.DATE_OF_BIRTH.getId()),
     domainComponent("Domain Component", BCStyle.DC.getId()),
+    description("Description", "2.5.4.13"),
+    businessCategory("Business Category", "2.5.4.15"),
+    generationQualifier("Generation Qualifier", "2.5.4.44"),
 
     unknown("Unknown",null);
 
@@ -67,13 +72,11 @@ public enum SubjectDnType {
     }
 
     public static SubjectDnType getNameTypeForOid(String oidString) {
-        SubjectDnType[] types = SubjectDnType.values();
-        for (SubjectDnType type : types) {
-            if (type.getOidString().equalsIgnoreCase(oidString)) {
-                return type;
-            }
-        }
-        return unknown;
+        Objects.requireNonNull(oidString, "OID must not be null");
+        return Arrays.stream(values())
+          .filter(subjectDnType -> oidString.equalsIgnoreCase(subjectDnType.getOidString()))
+          .findFirst()
+          .orElse(unknown);
     }
 
     public String getOidString() {
