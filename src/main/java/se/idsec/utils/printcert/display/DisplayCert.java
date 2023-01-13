@@ -78,10 +78,10 @@ import se.swedenconnect.cert.extensions.SubjectInformationAccess;
 import se.swedenconnect.cert.extensions.data.MonetaryValue;
 import se.swedenconnect.cert.extensions.data.PDSLocation;
 import se.swedenconnect.cert.extensions.data.SemanticsInformation;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.AttributeMapping;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.AuthContextInfo;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.IdAttributes;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.SAMLAuthContext;
+import se.swedenconnect.cert.extensions.data.saci.AttributeMapping;
+import se.swedenconnect.cert.extensions.data.saci.AuthContextInfo;
+import se.swedenconnect.cert.extensions.data.saci.IdAttributes;
+import se.swedenconnect.cert.extensions.data.saci.SAMLAuthContext;
 
 /**
  * @author stefan
