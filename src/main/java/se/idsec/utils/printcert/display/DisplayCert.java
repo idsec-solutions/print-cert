@@ -22,10 +22,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,6 +89,11 @@ import se.swedenconnect.cert.extensions.data.saci.SAMLAuthContext;
  * @author stefan
  */
 public class DisplayCert {
+
+  /** Formatter for XML date element content */
+  public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
+    "yyyy-MM-dd HH:mm:ss z",
+    Locale.ENGLISH).withZone(ZoneId.systemDefault());
 
   /**
    * The default cert display table class names for html print.
@@ -743,7 +750,7 @@ public class DisplayCert {
         AuthContextInfo aci = samlAuthContext.getAuthContextInfo();
         addDispItem(aci.getIdentityProvider(), "  Identity Provider", da);
         addDispItem(aci.getAuthnContextClassRef(), "  Level of Assurance", da);
-        addDispItem(aci.getAuthenticationInstant(), "  Authn Instant", da);
+        addDispItem(DATE_TIME_FORMATTER.format(aci.getAuthenticationInstant()), "  Authn Instant", da);
         addDispItem(aci.getAssertionRef(), "  Assertion Ref", da);
         addDispItem(aci.getServiceID(), "  ServiceID", da);
 
@@ -1088,5 +1095,4 @@ public class DisplayCert {
     }
     return rdnVal.toString();
   }
-
 }
