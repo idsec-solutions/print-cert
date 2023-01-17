@@ -64,6 +64,7 @@ import org.bouncycastle.asn1.x509.SubjectDirectoryAttributes;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.qualified.BiometricData;
 import org.bouncycastle.util.encoders.Hex;
+import org.w3c.dom.Element;
 
 import se.idsec.utils.printcert.PrintCertificate;
 import se.idsec.utils.printcert.data.SubjectAttributeInfo;
@@ -769,7 +770,14 @@ public class DisplayCert {
               }
             }
             String name = amt.getAttribute().getName();
-            String val = "SAML: " + name + " --> Type=" + type + " Ref=" + ref;
+            String friendlyName = amt.getAttribute().getFriendlyName();
+            String friendlyNameString = friendlyName != null ? " | " + friendlyName : "";
+            List<Element> attributeValues = amt.getAttribute().getAttributeValues();
+            String attributeValueString = "";
+            if (attributeValues != null && !attributeValues.isEmpty()){
+              attributeValueString = " (" + attributeValues.get(0).getTextContent() + ")";
+            }
+            String val = "SAML: " + name + friendlyNameString + " --> Type=" + type + " Ref=" + ref + attributeValueString;
             addDispItem(val, "  Attribute mapping " + String.valueOf(amIdx), da);
           }
         }
