@@ -1,0 +1,6 @@
+ignoreFiles = """
+**/test/**
+**/docs/**
+**/*.min.js
+**/target/**
+"""
