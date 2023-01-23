@@ -22,10 +22,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,6 +64,7 @@ import org.bouncycastle.asn1.x509.SubjectDirectoryAttributes;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.qualified.BiometricData;
 import org.bouncycastle.util.encoders.Hex;
+import org.w3c.dom.Element;
 
 import se.idsec.utils.printcert.PrintCertificate;
 import se.idsec.utils.printcert.data.SubjectAttributeInfo;
@@ -78,15 +81,20 @@ import se.swedenconnect.cert.extensions.SubjectInformationAccess;
 import se.swedenconnect.cert.extensions.data.MonetaryValue;
 import se.swedenconnect.cert.extensions.data.PDSLocation;
 import se.swedenconnect.cert.extensions.data.SemanticsInformation;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.AttributeMapping;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.AuthContextInfo;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.IdAttributes;
-import se.swedenconnect.schemas.cert.authcont.saci_1_0.SAMLAuthContext;
+import se.swedenconnect.cert.extensions.data.saci.AttributeMapping;
+import se.swedenconnect.cert.extensions.data.saci.AuthContextInfo;
+import se.swedenconnect.cert.extensions.data.saci.IdAttributes;
+import se.swedenconnect.cert.extensions.data.saci.SAMLAuthContext;
 
 /**
  * @author stefan
  */
 public class DisplayCert {
+
+  /** Formatter for XML date element content */
+  public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
+    "yyyy-MM-dd HH:mm:ss z",
+    Locale.ENGLISH).withZone(ZoneId.systemDefault());
 
   /**
    * The default cert display table class names for html print.
@@ -743,7 +751,7 @@ public class DisplayCert {
         AuthContextInfo aci = samlAuthContext.getAuthContextInfo();
         addDispItem(aci.getIdentityProvider(), "  Identity Provider", da);
         addDispItem(aci.getAuthnContextClassRef(), "  Level of Assurance", da);
-        addDispItem(aci.getAuthenticationInstant(), "  Authn Instant", da);
+        addDispItem(DATE_TIME_FORMATTER.format(aci.getAuthenticationInstant()), "  Authn Instant", da);
         addDispItem(aci.getAssertionRef(), "  Assertion Ref", da);
         addDispItem(aci.getServiceID(), "  ServiceID", da);
 
@@ -762,7 +770,14 @@ public class DisplayCert {
               }
             }
             String name = amt.getAttribute().getName();
-            String val = "SAML: " + name + " --> Type=" + type + " Ref=" + ref;
+            String friendlyName = amt.getAttribute().getFriendlyName();
+            String friendlyNameString = friendlyName != null ? " | " + friendlyName : "";
+            List<Element> attributeValues = amt.getAttribute().getAttributeValues();
+            String attributeValueString = "";
+            if (attributeValues != null && !attributeValues.isEmpty()){
+              attributeValueString = " (" + attributeValues.get(0).getTextContent() + ")";
+            }
+            String val = "SAML: " + name + friendlyNameString + " --> Type=" + type + " Ref=" + ref + attributeValueString;
             addDispItem(val, "  Attribute mapping " + String.valueOf(amIdx), da);
           }
         }
@@ -1088,5 +1103,4 @@ public class DisplayCert {
     }
     return rdnVal.toString();
   }
-
 }

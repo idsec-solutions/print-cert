@@ -51,9 +51,9 @@ import se.idsec.utils.printcert.utils.PEM;
  * @author Stefan Santeson
  */
 public class PrintCertificate extends X509CertificateHolder {
-    
+
     private static final long serialVersionUID = 3088571489307085589L;
-    
+
     Map<String, ExtensionInfo> extensionsMap;
     List<ExtensionInfo> extensionInfoList;
     X509Certificate cert;
@@ -118,11 +118,6 @@ public class PrintCertificate extends X509CertificateHolder {
         return null;
     }
 
-    /**
-     * Extension info Map. Oid string as key
-     *
-     * @return
-     */
     public Map<String, ExtensionInfo> getExtensionsMap() {
         return extensionsMap;
     }
@@ -138,11 +133,11 @@ public class PrintCertificate extends X509CertificateHolder {
     public PublicKey getPublicKey() {
         return cert.getPublicKey();
     }
-    
+
     public int getBasicConstraints() {
         return cert.getBasicConstraints();
     }
-    
+
     public X500Principal getIssuerX500Principal(){
         return cert.getIssuerX500Principal();
     }
@@ -150,11 +145,11 @@ public class PrintCertificate extends X509CertificateHolder {
     public X500Principal getSubjectX500Principal(){
         return cert.getSubjectX500Principal();
     }
-    
+
     public byte[] getExtensionValue(String oid){
         return cert.getExtensionValue(oid);
     }
-    
+
     @Override
     public Date getNotAfter(){
         return cert.getNotAfter();
@@ -163,7 +158,7 @@ public class PrintCertificate extends X509CertificateHolder {
     public Date getNotBefore(){
         return cert.getNotBefore();
     }
-    
+
     @Override
     public byte[] getEncoded(){
         try {
@@ -173,12 +168,12 @@ public class PrintCertificate extends X509CertificateHolder {
         }
         return null;
     }
-    
+
     @Override
     public BigInteger getSerialNumber(){
         return cert.getSerialNumber();
     }
-    
+
     public byte[] getSubjectKeyInfo() {
         ExtensionInfo extension = getExtensionInfo(Extension.subjectKeyIdentifier.getId());
         if (extension == null) {
@@ -292,7 +287,7 @@ public class PrintCertificate extends X509CertificateHolder {
      * @param heading A heading to add to the print. Null if none.
      * @param verbose Set to true to display explicit values of key parameters
      * and signature value
-     * @param decodeSubject
+     * @param decodeSubject whether to decode the subject
      * @return html print
      */
     public String toHtml(String heading, boolean verbose, boolean decodeSubject) {

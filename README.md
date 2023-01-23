@@ -15,6 +15,9 @@ The output formats offered by this library are:
 - Html based print (with customizable css)
 - PEM certificate format
 
+This library is used to provide HTML representation of certificates in the Sweden Connect certificate parser 
+application at [https://sandbox.swedenconnect.se/cap](https://sandbox.swedenconnect.se/cap)
+
 ## Maven
 
 The print-cert artifacts are published to Maven central.
