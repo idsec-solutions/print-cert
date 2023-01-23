@@ -41,6 +41,7 @@ public abstract class HtmlElement {
      *
      * @return html string
      */
+    @Override
     public String toString() {
         return toString(false);
     }
@@ -116,18 +117,18 @@ public abstract class HtmlElement {
     /**
      * Sets text content within the html element
      *
-     * @param text
+     * @param text the text content
      */
     public HtmlElement setText(String text) {
         this.text = text;
         return this;
-        
+
     }
 
     /**
      * Add a child html element to this html element
      *
-     * @param element
+     * @param element the HTML element to add
      * @return This element
      */
     public HtmlElement addHtmlElement(HtmlElement element) {
@@ -138,7 +139,7 @@ public abstract class HtmlElement {
     /**
      * Add a child html element to this html element
      *
-     * @param element
+     * @param element the HTML element to add
      * @return The added html element
      */
     public HtmlElement addNewHtmlElement(HtmlElement element) {
@@ -220,6 +221,7 @@ public abstract class HtmlElement {
             this.value = value;
         }
 
+        @Override
         public String toString() {
             StringBuilder b = new StringBuilder();
             if (value == null) {
@@ -241,6 +243,7 @@ public abstract class HtmlElement {
             this.value = value;
         }
 
+        @Override
         public String toString() {
             StringBuilder b = new StringBuilder();
             b.append(type).append(": ");
@@ -280,6 +283,7 @@ public abstract class HtmlElement {
             this.args = args;
         }
 
+        @Override
         public String toString() {
             StringBuilder b = new StringBuilder();
             b.append(" ").append(event).append("='");
@@ -302,7 +306,7 @@ public abstract class HtmlElement {
             boolean numeric = true;
             byte[] bytes = arg.getBytes();
             for (byte b : bytes) {
-                int c = (int) b;
+                int c = b;
                 if (c < 48 || c > 57) {  //if a char is outside of the numerif cange 0-9
                     numeric = false;
                 }

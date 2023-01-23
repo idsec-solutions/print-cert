@@ -44,14 +44,14 @@ public class TableElement extends HtmlElement {
      * Adds a table row to a HTML table
      *
      * @param cells an array of table cell data strings. Each string will be
-     * placed in a separate table cell from left to right
+     *      placed in a separate table cell from left to right
      * @param classNames The first string in the array will be used as class for
-     * the table row. additional strings in the array will be used as classes
-     * for each table cell from left to right. If the number of strings is <
-     * cells+1, then the last cells will have no class assigned. A String value
-     * of "" causes no class to be added to the corresponding cell/row @param
-     * colspan the column span for the last table cell @param show false of this
-     * table row should be hidden, otherwise true
+     *      the table row. additional strings in the array will be used as classes
+     *      for each table cell from left to right. If the number of strings is less than
+     *      cells+1, then the last cells will have no class assigned. A String value
+     *      of "" causes no class to be added to the corresponding cell or row
+     * @param colspan the column span for the last table cell
+     * @param show false of this table row should be hidden, otherwise true
      */
     public void addRow(String[] cells, String[] classNames, int colspan, boolean[] show, String id) {
         String trClass = classNames.length > 0 ? classNames[0] : "";
