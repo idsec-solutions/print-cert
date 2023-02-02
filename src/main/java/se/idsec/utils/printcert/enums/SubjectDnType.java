@@ -53,6 +53,10 @@ public enum SubjectDnType {
     description("Description", "2.5.4.13"),
     businessCategory("Business Category", "2.5.4.15"),
     generationQualifier("Generation Qualifier", "2.5.4.44"),
+    postalAddress("Postal Address", "2.5.4.16"),
+    placeOfBirth("Place of Birth", "1.3.6.1.5.5.7.9.2"),
+    gender("Gender", "1.3.6.1.5.5.7.9.3"),
+    countryOfCitizenship("Country of Citizenship", "1.3.6.1.5.5.7.9.4"),
 
     unknown("Unknown",null);
 

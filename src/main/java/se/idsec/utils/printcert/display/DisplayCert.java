@@ -27,11 +27,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1GeneralizedTime;
@@ -45,6 +48,7 @@ import org.bouncycastle.asn1.DERPrintableString;
 import org.bouncycastle.asn1.DERUTF8String;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AccessDescription;
+import org.bouncycastle.asn1.x509.Attribute;
 import org.bouncycastle.asn1.x509.AuthorityInformationAccess;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -72,6 +76,7 @@ import se.idsec.utils.printcert.PrintCertificate;
 import se.idsec.utils.printcert.data.SubjectAttributeInfo;
 import se.idsec.utils.printcert.display.html.TableElement;
 import se.idsec.utils.printcert.enums.OidName;
+import se.idsec.utils.printcert.enums.SubjectDnType;
 import se.idsec.utils.printcert.enums.SupportedExtension;
 import se.idsec.utils.printcert.extension.ExtensionInfo;
 import se.idsec.utils.printcert.utils.CertUtils;
@@ -337,7 +342,29 @@ public class DisplayCert {
       }
       return new UnitDisplayData(extension, idx, critical, da);
     case subjectDirectoryAttributes:
-      return new UnitDisplayData(extension, idx, critical, SubjectDirectoryAttributes.getInstance(extDataASN1).toString(), true);
+      SubjectDirectoryAttributes subjectDirectoryAttributes = SubjectDirectoryAttributes.getInstance(extDataASN1);
+      try {
+        Vector<Attribute> attributes = subjectDirectoryAttributes.getAttributes();
+        for (Attribute attribute : attributes) {
+          List<String> valueList = Arrays.stream(attribute.getAttributeValues())
+            .map(asn1Encodable -> getStringValue(asn1Encodable))
+            .collect(Collectors.toList());
+          ASN1ObjectIdentifier attrType = attribute.getAttrType();
+          SubjectDnType subjectDnType = SubjectDnType.getNameTypeForOid(attrType);
+          String attrName = subjectDnType.getOidString() == null
+            ? attrType.getId()
+            : subjectDnType.getDispName();
+          if (!valueList.isEmpty()) {
+            String displayValue = valueList.size() == 1
+              ? valueList.get(0)
+              : "[ " + String.join(", ", valueList) + " ]";
+            da.add(new String[] { attrName, displayValue });
+          }
+        }
+      } catch (Exception ex) {
+        return new UnitDisplayData(extension, idx, critical, SubjectDirectoryAttributes.getInstance(extDataASN1).toString(), true);
+      }
+      return new UnitDisplayData(extension, idx, critical, da);
     case subjectInfoAccess:
       SubjectInformationAccess sia = SubjectInformationAccess.getInstance(extDataASN1);
       AccessDescription[] siadescArray = sia.getAccessDescriptions();
@@ -357,6 +384,7 @@ public class DisplayCert {
       return new UnitDisplayData(extension, idx, critical, da);
     //return new UnitDisplayData(extension, idx, critical, new SubjectKeyIdentifierExtension(critical, bytes).toString(), true);
     case ocspNocheck:
+      da.add(new String[] { "OCSP no-check", "true" });
       return new UnitDisplayData(extension, idx, critical, da);
       //return new UnitDisplayData(extension, idx, critical, new OCSPNoCheckExtension(critical, bytes).toString(), true);
     case authContext:
