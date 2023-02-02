@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -306,10 +308,19 @@ public class DisplayCert {
     case privateKeyUsagePeriod:
       PrivateKeyUsagePeriod pkup = PrivateKeyUsagePeriod.getInstance(extDataASN1);
       if (pkup.getNotBefore() != null) {
-        da.add(new String[] { "NotBefore ", pkup.getNotBefore().toString() });
+        try {
+          da.add(new String[] { "NotBefore ", DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(pkup.getNotBefore().getDate().getTime())) });
+        }
+        catch (ParseException e) {
+          da.add(new String[]{"NotBefore ", "Illegal time data"});
+        }
       }
       if (pkup.getNotAfter() != null) {
-        da.add(new String[] { "NotAfter ", pkup.getNotAfter().toString() });
+        try {
+          da.add(new String[] { "NotAfter ", DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(pkup.getNotAfter().getDate().getTime())) });
+        } catch (ParseException e) {
+          da.add(new String[]{"NotBefore ", "Illegal time data"});
+        }
       }
       return new UnitDisplayData(extension, idx, critical, da);
     case qCStatements:
