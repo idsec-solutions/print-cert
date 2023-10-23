@@ -20,11 +20,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -242,8 +240,8 @@ public class DisplayCert {
           "Type: " + BiometricInfo.getTypeString(biometricData.getTypeOfBiometricData()) });
         da.add(new String[] { "  Hash algoritm", biometricData.getHashAlgorithm().getAlgorithm().getId() });
         da.add(new String[] { "  Hash value", Hex.toHexString(biometricData.getBiometricDataHash().getOctets()) });
-        if (biometricData.getSourceDataUri() != null) {
-          da.add(new String[] { "  Source UIR", biometricData.getSourceDataUri().getString() });
+        if (biometricData.getSourceDataUriIA5() != null) {
+          da.add(new String[] { "  Source UIR", biometricData.getSourceDataUriIA5().getString() });
         }
       }
       return new UnitDisplayData(extension, idx, critical, da);
@@ -344,6 +342,7 @@ public class DisplayCert {
     case subjectDirectoryAttributes:
       SubjectDirectoryAttributes subjectDirectoryAttributes = SubjectDirectoryAttributes.getInstance(extDataASN1);
       try {
+        @SuppressWarnings("unchecked")
         Vector<Attribute> attributes = subjectDirectoryAttributes.getAttributes();
         for (Attribute attribute : attributes) {
           List<String> valueList = Arrays.stream(attribute.getAttributeValues())
