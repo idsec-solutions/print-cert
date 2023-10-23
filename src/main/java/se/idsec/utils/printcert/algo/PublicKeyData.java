@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.security.PublicKey;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bouncycastle.asn1.ASN1BitString;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -50,7 +52,7 @@ public class PublicKeyData {
             ASN1Sequence pkSeq = ASN1Sequence.getInstance(ain.readObject());
             AlgorithmIdentifier algId = AlgorithmIdentifier.getInstance(pkSeq.getObjectAt(0));
             algorithmOid = algId.getAlgorithm();
-            DERBitString pkBits = DERBitString.getInstance(pkSeq.getObjectAt(1));
+            ASN1BitString pkBits = ASN1BitString.getInstance(pkSeq.getObjectAt(1));
             
             pkType = PublicKeyType.getKeyType(algorithmOid);
             pkValData = getPKValueData(pkBits,algId);
@@ -59,7 +61,7 @@ public class PublicKeyData {
         }
     }
 
-    private PKValueData getPKValueData(DERBitString pkBits, AlgorithmIdentifier algId) {
+    private PKValueData getPKValueData(ASN1BitString pkBits, AlgorithmIdentifier algId) {
         switch (pkType){
             case rsa:
                 return new RSAKeyParser(pkBits, algId);

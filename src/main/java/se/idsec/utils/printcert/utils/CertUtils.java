@@ -91,7 +91,8 @@ public class CertUtils {
                 if (certObj instanceof ASN1TaggedObject) {
                     ASN1TaggedObject taggedObj = (ASN1TaggedObject) certObj;
                     if (taggedObj.getTagNo() == 3) {
-                        ASN1Sequence extSeq = ASN1Sequence.getInstance(taggedObj.getObject());
+                        ASN1Sequence extSeq = ASN1Sequence.getInstance(
+                          taggedObj.getBaseObject());
 
                         //Loop through the extensions
                         for (int extIdx = 0; extIdx < extSeq.size(); extIdx++) {
