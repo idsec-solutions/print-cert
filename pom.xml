@@ -2,17 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  
   <groupId>se.idsec.utils</groupId>
   <artifactId>print-cert</artifactId>
-  <version>1.0.6-SNAPSHOT</version>
+  <version>1.0.6</version>
   <packaging>jar</packaging>
+  
   <name>Printable Certificates</name>
   <description>Utility for printing X.509 certificates</description>
   <url>https://github.com/idsec-solutions/print-cert</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <slf4j.version>2.0.6</slf4j.version>
+    <slf4j.version>2.0.9</slf4j.version>
     <bouncy-castle.version>1.76</bouncy-castle.version>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
@@ -71,23 +73,28 @@
   </distributionManagement>
 
   <dependencyManagement>
+    
     <dependencies>
+      
       <dependency>
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcpkix-jdk18on</artifactId>
         <version>${bouncy-castle.version}</version>
       </dependency>
+      
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
+      
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
         <version>${slf4j.version}</version>
         <scope>test</scope>
       </dependency>
+      
     </dependencies>
   </dependencyManagement>
 
@@ -115,6 +122,7 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+    
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
@@ -128,7 +136,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.4.1</version>
         <executions>
           <execution>
             <id>enforce</id>
@@ -159,7 +167,7 @@
           <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.8</version>
+            <version>1.6.13</version>
             <extensions>true</extensions>
             <configuration>
               <serverId>ossrh</serverId>
@@ -175,7 +183,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
+            <version>3.1.0</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -190,7 +198,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
@@ -210,7 +218,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.6.0</version>
             <executions>
               <execution>
                 <id>attach-javadoc</id>
@@ -225,8 +233,8 @@
               <windowtitle>Print Certificates - ${project.version}</windowtitle>
               <detectJavaApiLink>true</detectJavaApiLink>
               <links>
-                <link>https://javadoc.io/doc/org.bouncycastle/bcprov-jdk15on/latest/</link>
-                <link>https://javadoc.io/doc/org.bouncycastle/bcpkix-jdk15on/latest/</link>
+                <link>https://javadoc.io/doc/org.bouncycastle/bcprov-jdk18on/latest/</link>
+                <link>https://javadoc.io/doc/org.bouncycastle/bcpkix-jdk18on/latest/</link>
                 <link>https://docs.swedenconnect.se/signature-validation/javadoc/cert-extensions/</link>
               </links>
               <doclint>all,-missing</doclint>
