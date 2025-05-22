@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public abstract class PKValueData {
     ASN1BitString pkValBitString;
     AlgorithmIdentifier aid;
     int keySize;
-    
+
     public PKValueData(ASN1BitString pkValBitString, AlgorithmIdentifier aid) {
         this.pkValBitString = pkValBitString;
         parsePk();
@@ -46,5 +46,5 @@ public abstract class PKValueData {
     public int getKeySize() {
         return keySize;
     }
-    
+
 }

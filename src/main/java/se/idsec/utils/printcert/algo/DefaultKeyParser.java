@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,31 +19,30 @@ import org.bouncycastle.asn1.ASN1BitString;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /**
- *
  * @author stefan
  */
 public class DefaultKeyParser extends PKValueData {
 
-    public DefaultKeyParser(ASN1BitString pkValBitString, AlgorithmIdentifier aid) {
-        super(pkValBitString, aid);
+  public DefaultKeyParser(ASN1BitString pkValBitString, AlgorithmIdentifier aid) {
+    super(pkValBitString, aid);
+  }
+
+  @Override
+  protected void parsePk() {
+    int keyBits;
+    int keydatalen = pkValBitString.getBytes().length;
+    keyBits = (keydatalen - 12) * 8;
+    if (keydatalen > 127 && keydatalen < 150) {
+      keyBits = 1024;
+    }
+    if (keydatalen > 255 && keydatalen < 280) {
+      keyBits = 2048;
+    }
+    if (keydatalen > 511 && keydatalen < 540) {
+      keyBits = 4096;
     }
 
-    @Override
-    protected void parsePk() {
-        int keyBits;
-        int keydatalen = pkValBitString.getBytes().length;
-        keyBits = (keydatalen - 12) * 8;
-        if (keydatalen > 127 && keydatalen < 150) {
-            keyBits = 1024;
-        }
-        if (keydatalen > 255 && keydatalen < 280) {
-            keyBits = 2048;
-        }
-        if (keydatalen > 511 && keydatalen < 540) {
-            keyBits = 4096;
-        }
-
-        keySize = keyBits;
-    }
+    keySize = keyBits;
+  }
 
 }
