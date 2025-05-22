@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public class PublicKeyData {
             AlgorithmIdentifier algId = AlgorithmIdentifier.getInstance(pkSeq.getObjectAt(0));
             algorithmOid = algId.getAlgorithm();
             ASN1BitString pkBits = ASN1BitString.getInstance(pkSeq.getObjectAt(1));
-            
+
             pkType = PublicKeyType.getKeyType(algorithmOid);
             pkValData = getPKValueData(pkBits,algId);
         } catch (IOException ex) {
@@ -68,7 +68,7 @@ public class PublicKeyData {
             case ecdsa:
                 return new ECKeyParser(pkBits, algId);
             default:
-                return new DefaultKeyParser(pkBits, algId);            
+                return new DefaultKeyParser(pkBits, algId);
         }
     }
 
@@ -91,7 +91,7 @@ public class PublicKeyData {
     public PKValueData getPkValData() {
         return pkValData;
     }
-    
+
     public int getKeySize(){
         return pkValData.getKeySize();
     }

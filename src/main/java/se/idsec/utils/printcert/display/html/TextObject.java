@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,6 @@ public class TextObject extends HtmlElement {
 
     public TextObject(String text) {
         this.text=text;
-    }    
-    
+    }
+
 }

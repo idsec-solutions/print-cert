@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class RSAKeyParser extends PKValueData {
             ASN1Sequence pkValSeq = ASN1Sequence.getInstance(pkIn.readObject());
             ASN1Integer modulus = ASN1Integer.getInstance(pkValSeq.getObjectAt(0));
             ASN1Integer.getInstance(pkValSeq.getObjectAt(1));
-            keySize = modulus.getValue().bitLength();            
+            keySize = modulus.getValue().bitLength();
         } catch (Exception e) {
             keySize = 0;
         }

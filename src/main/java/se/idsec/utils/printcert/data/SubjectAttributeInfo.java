@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,13 @@ public class SubjectAttributeInfo {
     public SubjectAttributeInfo(ASN1ObjectIdentifier oid, String value) {
         this.oid = oid;
         this.value = value;
-        
+
         type = SubjectDnType.getNameTypeForOid(oid);
         if (!type.equals(SubjectDnType.unknown)){
             dispName = type.getDispName();
         } else {
             dispName = OidName.getName(oid.getId());
-        }        
+        }
     }
 
     public SubjectAttributeInfo() {
@@ -75,6 +75,6 @@ public class SubjectAttributeInfo {
     public void setValue(String value) {
         this.value = value;
     }
-    
-    
+
+
 }

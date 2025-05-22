@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public enum OidName {
     id_pkix_ad_caIssuers("caIssuers", AccessDescription.id_ad_caIssuers.getId()),
     id_pkix_ad_ocsp("ocsp", AccessDescription.id_ad_ocsp.getId()),
     ;
-    
+
     String name;
     String oid;
 
@@ -63,9 +63,9 @@ public enum OidName {
     public String getOid() {
         return oid;
     }
-    
-    
-    
+
+
+
     public static String getName(String oidStr){
         for (OidName oid : values()){
             if (oid.getOid().equalsIgnoreCase(oidStr)){
@@ -74,5 +74,5 @@ public enum OidName {
         }
         return oidStr;
     }
-    
+
 }

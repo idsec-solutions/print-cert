@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021. IDsec Solutions AB (IDsec)
+ * Copyright 2021-2025 IDsec Solutions AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ public enum AttributeValueEncoding {
     PritableString,
     UTF8,
     IA5String;
-    
+
     public ASN1Encodable getEncodedAttributeVal (String value){
         switch(this){
             case PritableString:
@@ -38,7 +38,7 @@ public enum AttributeValueEncoding {
             case IA5String:
                 return new DERIA5String(value);
             default:
-                throw new AssertionError(this.name());            
+                throw new AssertionError(this.name());
         }
     }
 }
