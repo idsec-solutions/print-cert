@@ -1,7 +1,7 @@
 ![Logo](https://idsec-solutions.github.io/signservice-integration-api/img/idsec.png)
 # PrintCertificate
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven central](https://maven-badges.herokuapp.com/maven-central/se.idsec.utils/print-cert/badge.svg)](https://maven-badges.herokuapp.com/maven-central/se.idsec.utils/print-cert)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven Central](https://img.shields.io/maven-central/v/se.idsec.utils/print-cert.svg)](https://central.sonatype.com/artifact/se.idsec.utils/print-cert)
 
 Open source library for printing X.509 certificate content
 
