@@ -42,7 +42,7 @@ public enum SubjectDnType {
     state("State","2.5.4.8"),
     serialNumber("ID number","2.5.4.5"),
     orgnaizationName("Organization","2.5.4.10"),
-    orgnaizationalUnitName("organization Unit","2.5.4.11"),
+    orgnaizationalUnitName("Organization Unit","2.5.4.11"),
     organizationIdentifier("Organization ID","2.5.4.97"),
     pseudonym("Pseudonym","2.5.4.65"),
     dnQualifier("DN Qualifier","2.5.4.46"),
@@ -56,6 +56,7 @@ public enum SubjectDnType {
     postalAddress("Postal Address", "2.5.4.16"),
     placeOfBirth("Place of Birth", "1.3.6.1.5.5.7.9.2"),
     gender("Gender", "1.3.6.1.5.5.7.9.3"),
+    telephoneNumber("Telephone Number", "2.5.4.20"),
     countryOfCitizenship("Country of Citizenship", "1.3.6.1.5.5.7.9.4"),
 
     unknown("Unknown",null);
