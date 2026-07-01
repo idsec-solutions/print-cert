@@ -19,6 +19,7 @@ import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ocsp.OCSPObjectIdentifiers;
 import org.bouncycastle.asn1.x509.Extension;
 import se.swedenconnect.cert.extensions.AuthnContext;
+import se.swedenconnect.cert.extensions.SignedDocumentBinding;
 
 /**
  *
@@ -50,6 +51,8 @@ public enum SupportedExtension {
     authContext("Authentication Context", AuthnContext.OID),
     signedCertificateTimestampList("Signed Certificate Timestamp List", new ASN1ObjectIdentifier("1.3.6.1.4.1.11129.2.4.2")),
     netscapeCertType("Netscape Certificate Type", new ASN1ObjectIdentifier("2.16.840.1.113730.1.1")),
+    noRevAvail("No Revocation Available", Extension.noRevAvail),
+    signedDocumentBinding("Signed Document Binding", SignedDocumentBinding.OID),
     unknown("Unknown", null);
 
     String name;

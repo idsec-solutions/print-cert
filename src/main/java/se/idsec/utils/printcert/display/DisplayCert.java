@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +68,7 @@ import org.bouncycastle.asn1.x509.PrivateKeyUsagePeriod;
 import org.bouncycastle.asn1.x509.SubjectDirectoryAttributes;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.qualified.BiometricData;
+import org.bouncycastle.jcajce.util.MessageDigestUtils;
 import org.bouncycastle.util.encoders.Hex;
 import org.w3c.dom.Element;
 
@@ -82,6 +84,7 @@ import se.swedenconnect.cert.extensions.AuthnContext;
 import se.swedenconnect.cert.extensions.BiometricInfo;
 import se.swedenconnect.cert.extensions.InhibitAnyPolicy;
 import se.swedenconnect.cert.extensions.QCStatements;
+import se.swedenconnect.cert.extensions.SignedDocumentBinding;
 import se.swedenconnect.cert.extensions.SubjectInformationAccess;
 import se.swedenconnect.cert.extensions.data.MonetaryValue;
 import se.swedenconnect.cert.extensions.data.PDSLocation;
@@ -386,6 +389,9 @@ public class DisplayCert {
       da.add(new String[] { "OCSP no-check", "true" });
       return new UnitDisplayData(extension, idx, critical, da);
       //return new UnitDisplayData(extension, idx, critical, new OCSPNoCheckExtension(critical, bytes).toString(), true);
+    case noRevAvail:
+      da.add(new String[] { SupportedExtension.noRevAvail.name(), "true" });
+      return new UnitDisplayData(extension, idx, critical, da);
     case authContext:
       AuthnContext authCont = AuthnContext.getInstance(extDataASN1);
       getAuthnContextDisp(authCont, da);
@@ -403,6 +409,12 @@ public class DisplayCert {
       return unknownData;
     case signedCertificateTimestampList:
       da.add(new String[] { "SignedTimeStampList", String.valueOf(bytes.length) + " bytes of data" });
+      return new UnitDisplayData(extension, idx, critical, da);
+    case signedDocumentBinding:
+      SignedDocumentBinding sdb = SignedDocumentBinding.getInstance(extDataASN1);
+      addDispItem(Optional.ofNullable(sdb.getBindingType()).orElse("default"), "bindingType", da);
+      addDispItem(byteArrayToHexString(sdb.getDataTbsHash()), "dataTbsHash", da);
+      addDispItem(MessageDigestUtils.getDigestName(sdb.getHashAlg().getAlgorithm()), "hashAlg", da);
       return new UnitDisplayData(extension, idx, critical, da);
     default:
       throw new AssertionError(extension.name());
